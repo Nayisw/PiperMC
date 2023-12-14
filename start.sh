@@ -46,14 +46,26 @@ dependencies() {
 dependencies
 echo -e "\e[32mDependencies Installed!\e[0m"
 
+# Start the server
+start_server() {
+    jar="$PWD/server/start.jar"
+    BPYTOP=$HOME/.local/bin/bpytop
+
+    screen -S afk -d -m $BPYTOP
+
+    cd server && screen -S server -d -m java -Xms${ram} -Xmx${ram} -jar ${jar} nogui
+    sleep 10
+    screen -r server
+}
+
+
 # Funtion to install the server
 install_paper() {
 
     echo -e "\e[32mVisit https://papermc.io/api/v2/projects/paper to see supported versions\e[0m"
 
     echo -e "\e[33mLeave blank and press Enter to select the latest version by default\e[0m"
-    echo -e "\e[34mEnter your version: \e[0m"
-    read MC_VERSION
+    read -rp "Enter your version: " MC_VERSION
 
     API_URL="https://papermc.io/api/v2/projects/paper"
 
@@ -75,37 +87,36 @@ install_paper() {
     curl -o start.jar -L "${DOWNLOAD_URL}"
 
     echo -e "\e[33mPaperMC $VERSION downloaded successfully!\e[0m"
+
+    start_server
+    echo -e "\e[32mSuccessfully installed server!\e[0m"
 }
-echo -e "\e[32mSuccessfully installed server!\e[0m"
 
 # Check if server is installed
 if [ ! -d server ]; then
     echo -e "\e[33m Server not installed!\nInstall a server to continue...\e[0m"
 
-    echo -e "\95m Do you want to install the server right now?\e[0m"
+    echo -e "\e[95m Do you want to install the server right now?\e[0m"
     echo "1. Yes"
     echo "2. No"
-    read yn
-    if $yn -eq 1; then
+
+    read -rp "Enter your choice: " choice
+
+    case $choice in
+    1)
         install_paper
-    elif $yn -eq 2; then
+        ;;
+    2)
         exit 0
-    fi
+        ;;
+    *)
+        echo "invalid choice. Closing.."
+        exit 0
+        ;;
+    esac
 
 fi
 
-# Start the server
-start_server() {
-    cd server 
-    jar="start.jar"
-    BPYTOP=$HOME/.local/bin/bpytop
-
-    screen -S afk -d -m $BPYTOP
-
-    screen -S server -d -m java -Xms${ram} -Xmx${ram} -jar ${jar} nogui
-    screen -r server
-
-}
 
 # Menu
 main() {
@@ -113,30 +124,32 @@ main() {
     echo "Server Menu"
     echo "-------------------------------"
     echo "1. Start Server"
-    echo "2. Install Playit.gg"
-    echo "3. Exit"
+    echo "2. Stop the Server"
+    echo "3. Install Playit.gg"
+    echo "4. Exit"
 
     read -rp "Enter your choice: " choice
 
     case $choice in
     1)
         echo "Starting the server..."
+        echo "Please wait 10 seconds"
         start_server
         ;;
     2)
         echo "Closing the server..."
         killall screen
         clear
-        echo -e "\e32mType './start.sh' to start the server again!"
+        echo -e "\e[32mType './start.sh' to start the server again!\e[0m"
         ;;
     3)
         echo "Installing Playit.gg"
 
-        if [ -d server/plugins ]; then
+        if [ ! -d $PWD/server/plugins ]; then
+            echo -e "\e[31mPlease start the server once to install Playit.gg\e[0m"
+        else
             cd server/plugins
             wget https://github.com/playit-cloud/playit-minecraft-plugin/releases/latest/download/playit-minecraft-plugin.jar
-        else
-            echo "Please start the server once to install Playit.gg"
         fi
 
         ;;
