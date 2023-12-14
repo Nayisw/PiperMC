@@ -81,14 +81,14 @@ install_paper() {
         DOWNLOAD_URL="${API_URL}/versions/${MC_VERSION}/builds/${VER_BUILD}/downloads/paper-${VERSION}.jar"
     fi
 
-    mkdir -p "$PWD/server" && cd server
+    mkdir -p "$PWD/server" && cd server || exit
     wget -O eula.txt https://cdn.discordapp.com/attachments/772003388455125002/1148153568877097062/eula.txt #EULA
 
     curl -o start.jar -L "${DOWNLOAD_URL}"
 
     echo -e "\e[33mPaperMC $VERSION downloaded successfully!\e[0m"
 
-    start_server
+    java -jar start.jar
     echo -e "\e[32mSuccessfully installed server!\e[0m"
 }
 
@@ -145,10 +145,10 @@ main() {
     3)
         echo "Installing Playit.gg"
 
-        if [ ! -d $PWD/server/plugins ]; then
+        if [ ! -d "$PWD/server/plugins" ]; then
             echo -e "\e[31mPlease start the server once to install Playit.gg\e[0m"
         else
-            cd server/plugins
+            cd server/plugins || exit
             wget https://github.com/playit-cloud/playit-minecraft-plugin/releases/latest/download/playit-minecraft-plugin.jar
         fi
 
