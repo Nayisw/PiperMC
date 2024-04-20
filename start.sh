@@ -7,12 +7,9 @@ mem=$(grep MemTotal /proc/meminfo | sed -e 's/MemTotal:[ ]*//' | sed -e 's/ kB//
 mem=$(($mem/1024/1024))
 
 
-
 echo "> Starting the server up. Please wait..."                                                                                 
 echo "> Installing Dependencise..."
-
 sudo apt install -y -qq screen wget  
-
 echo "> Dependencise Installed!"
 
 # start all the screens here 
@@ -23,7 +20,6 @@ screen -S afk -d -m $FILE
 
 
 echo "-- Your Server is now ONLINE! --"
-echo
 echo "Type [screen -ls] to check the Running Processes"
 echo "Type [screen -r server] to enter the Server Console"
 echo "Type [screen -r afk] to enter AFK mode"

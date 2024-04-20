@@ -4,20 +4,16 @@ chmod +x *
 export MAIN_DIR=$PWD
 
 # Installing Java JDK
-
 wget -q "https://download.java.net/java/GA/jdk17.0.1/2a2082e5a09d4267845be086888add4f/12/GPL/openjdk-17.0.1_linux-x64_bin.tar.gz" -O bin/java.tar.xz
 cd $MAIN_DIR/bin
 tar -xf java.tar.xz && mv "jdk-17.0.1" java_bins
 
 
-
 echo -e "\e[32mVisit https://papermc.io/api/v2/projects/paper to see supported versions\e[0m"
-
 echo -e "\e[33mLeave blank and press Enter to select the latest version by default\e[0m"
 read -rp "Enter your version: " MC_VERSION
 
 API_URL="https://papermc.io/api/v2/projects/paper"
-
 if [ -z "$MC_VERSION" ]; then
     LATEST_VERSION=$(curl -s "${API_URL}" | jq -r '.versions' | jq -r '.[-1]')
     MC_VERSION="${LATEST_VERSION}"
@@ -34,9 +30,7 @@ cd $MAIN_DIR
 mkdir -p "$MAIN_DIR/server" && cd server || exit
 
 curl -o start.jar -L "${DOWNLOAD_URL}"
-
 echo -e "\e[33mPaperMC $VERSION downloaded successfully!\e[0m"
-
 echo -e "\e[32mSuccessfully installed server!\e[0m"
 
 
