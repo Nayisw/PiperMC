@@ -18,7 +18,7 @@ echo "> Dependencise Installed!"
 # start all the screens here 
 cd $MAIN_DIR/server
 killall screen
-screen -S server -d -m $JAVA -Xmx${mem}G -Xms${mem}G -jar server.jar nogui
+screen -S server -d -m $JAVA -Xmx${mem}G -Xms${mem}G -jar start.jar nogui
 screen -S afk -d -m $FILE
 
 

@@ -30,7 +30,8 @@ else
     DOWNLOAD_URL="${API_URL}/versions/${MC_VERSION}/builds/${VER_BUILD}/downloads/paper-${VERSION}.jar"
 fi
 
-mkdir -p "$PWD/server" && cd server || exit
+cd $MAIN_DIR
+mkdir -p "$MAIN_DIR/server" && cd server || exit
 
 curl -o start.jar -L "${DOWNLOAD_URL}"
 
